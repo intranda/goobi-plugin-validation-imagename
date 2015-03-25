@@ -120,13 +120,11 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
                     Helper.setFehlerMeldung("Die Datei " + filename + " kann nicht als Zahl intepretiert werden.");
                     return false;
                 }
-                if (ancestor == null) {
+                if (ancestor == null || ancestor + 1 == current) {
                     ancestor = current;
                 } else {
-                    if (ancestor + 1 != current) {
-                        Helper.setFehlerMeldung("Die Datei " + filename + " folgt nicht der richtigen Reihenfolge.");
-                        return false;
-                    }
+                    Helper.setFehlerMeldung("Die Datei " + filename + " folgt nicht der richtigen Reihenfolge.");
+                    return false;
                 }
             }
         }
