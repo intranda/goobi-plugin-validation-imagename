@@ -93,6 +93,9 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
             for (String pattern : regexList) {
                 validName = Pattern.matches(pattern, filepart);
                 containsNonDigit = Pattern.matches(".*\\D+.*", filepart);
+                if (validName) {
+                    break;
+                }
             }
 
             if (!validName) {
