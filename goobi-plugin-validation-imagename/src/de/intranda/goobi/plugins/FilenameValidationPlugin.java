@@ -144,7 +144,7 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
         return PLUGIN_NAME;
     }
 
-    @Override
+    
     public String getDescription() {
         return PLUGIN_NAME;
     }
