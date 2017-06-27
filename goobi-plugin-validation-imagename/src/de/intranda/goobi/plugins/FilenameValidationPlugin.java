@@ -74,12 +74,12 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
     private boolean validateFolder(List<String> regexList, boolean validateOrder, String foldername) {
         File folder = new File(foldername);
         if (!folder.exists()) {
-            Helper.setFehlerMeldung("Validierung fehlgeschlagen, der orig-Ordner existiert nicht.");
+            Helper.setFehlerMeldung("plugin_validation_filenames_missingMasterFolder");
             return false;
         }
         String[] filenames = folder.list();
         if (filenames == null || filenames.length == 0) {
-            Helper.setFehlerMeldung("Validierung fehlgeschlagen, der orig-Ordner enthält keine Daten.");
+            Helper.setFehlerMeldung("plugin_validation_filenames_emptyMasterFolder");
             return false;
         }
         boolean allFilesContainsDigits = true;
@@ -99,7 +99,8 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
             }
 
             if (!validName) {
-                Helper.setFehlerMeldung("Validierung fehlgeschlagen, der Name " + filename + " entspricht nicht dem angegebenen Schema.");
+                String s = Helper.getTranslation("plugin_validation_filenames_wrongName");
+            	Helper.setFehlerMeldungUntranslated(s +" " + filename);
                 return false;
             }
 
@@ -120,13 +121,15 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
                 try {
                     current = new Integer(filepart);
                 } catch (Exception e) {
-                    Helper.setFehlerMeldung("Die Datei " + filename + " kann nicht als Zahl intepretiert werden.");
+                	String s = Helper.getTranslation("plugin_validation_filenames_notANumber");
+                	Helper.setFehlerMeldungUntranslated(s +" " + filename);
                     return false;
                 }
                 if (ancestor == null || ancestor + 1 == current) {
                     ancestor = current;
                 } else {
-                    Helper.setFehlerMeldung("Die Datei " + filename + " folgt nicht der richtigen Reihenfolge.");
+                	String s = Helper.getTranslation("plugin_validation_filenames_wrongOrder");
+                	Helper.setFehlerMeldungUntranslated(s +" " + filename);
                     return false;
                 }
             }
