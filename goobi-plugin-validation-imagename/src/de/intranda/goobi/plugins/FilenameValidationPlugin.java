@@ -26,7 +26,7 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
 
     private static final Logger logger = Logger.getLogger(FilenameValidationPlugin.class);
 
-    private static final String PLUGIN_NAME = "FilenameValidationPlugin";
+    private static final String PLUGIN_NAME = "intranda_validation_filename";
     private Step step;
 
     @Override
@@ -35,12 +35,12 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
         Process p = step.getProzess();
 
         @SuppressWarnings("unchecked")
-        List<String> regexList = ConfigPlugins.getPluginConfig(this).getList("validation.pattern");
+        List<String> regexList = ConfigPlugins.getPluginConfig(PLUGIN_NAME).getList("validation.pattern");
 
-        boolean validateMasterFolder = ConfigPlugins.getPluginConfig(this).getBoolean("validateMasterFolder", false);
-        boolean validateMediaFolder = ConfigPlugins.getPluginConfig(this).getBoolean("validateMediaFolder", false);
+        boolean validateMasterFolder = ConfigPlugins.getPluginConfig(PLUGIN_NAME).getBoolean("validateMasterFolder", false);
+        boolean validateMediaFolder = ConfigPlugins.getPluginConfig(PLUGIN_NAME).getBoolean("validateMediaFolder", false);
 
-        boolean validateOrder = ConfigPlugins.getPluginConfig(this).getBoolean("validateOrder", false);
+        boolean validateOrder = ConfigPlugins.getPluginConfig(PLUGIN_NAME).getBoolean("validateOrder", false);
 
         if (validateMasterFolder) {
             try {
