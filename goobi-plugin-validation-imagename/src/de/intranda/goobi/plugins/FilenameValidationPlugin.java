@@ -7,8 +7,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import net.xeoh.plugins.base.annotations.PluginImplementation;
-
 import org.apache.log4j.Logger;
 import org.goobi.beans.Process;
 import org.goobi.beans.Step;
@@ -20,6 +18,7 @@ import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.helper.Helper;
 import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
+import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 @PluginImplementation
 public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
@@ -34,8 +33,7 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
 
         Process p = step.getProzess();
 
-        @SuppressWarnings("unchecked")
-        List<String> regexList = ConfigPlugins.getPluginConfig(PLUGIN_NAME).getList("validation.pattern");
+        List<String> regexList = Arrays.asList(ConfigPlugins.getPluginConfig(PLUGIN_NAME).getStringArray("validation.pattern"));
 
         boolean validateMasterFolder = ConfigPlugins.getPluginConfig(PLUGIN_NAME).getBoolean("validateMasterFolder", false);
         boolean validateMediaFolder = ConfigPlugins.getPluginConfig(PLUGIN_NAME).getBoolean("validateMediaFolder", false);
@@ -100,7 +98,7 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
 
             if (!validName) {
                 String s = Helper.getTranslation("plugin_validation_filenames_wrongName");
-            	Helper.setFehlerMeldungUntranslated(s +" " + filename);
+                Helper.setFehlerMeldungUntranslated(s +" " + filename);
                 return false;
             }
 
@@ -121,15 +119,15 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
                 try {
                     current = new Integer(filepart);
                 } catch (Exception e) {
-                	String s = Helper.getTranslation("plugin_validation_filenames_notANumber");
-                	Helper.setFehlerMeldungUntranslated(s +" " + filename);
+                    String s = Helper.getTranslation("plugin_validation_filenames_notANumber");
+                    Helper.setFehlerMeldungUntranslated(s +" " + filename);
                     return false;
                 }
                 if (ancestor == null || ancestor + 1 == current) {
                     ancestor = current;
                 } else {
-                	String s = Helper.getTranslation("plugin_validation_filenames_wrongOrder");
-                	Helper.setFehlerMeldungUntranslated(s +" " + filename);
+                    String s = Helper.getTranslation("plugin_validation_filenames_wrongOrder");
+                    Helper.setFehlerMeldungUntranslated(s +" " + filename);
                     return false;
                 }
             }
@@ -147,7 +145,7 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
         return PLUGIN_NAME;
     }
 
-    
+
     public String getDescription() {
         return PLUGIN_NAME;
     }
