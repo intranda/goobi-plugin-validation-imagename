@@ -2,8 +2,8 @@
 <config_plugin>
 	<validation>
     <!-- file name must match against one of the patterns -->
-		<pattern>\\w+_\\d{4}</pattern>
-		<pattern>\\d{8}</pattern>
+		<pattern>\w+_\d{4}</pattern>
+		<pattern>\d{8}</pattern>
 	</validation>
 	<validateMasterFolder>true</validateMasterFolder>
 	<validateMediaFolder>false</validateMediaFolder>
