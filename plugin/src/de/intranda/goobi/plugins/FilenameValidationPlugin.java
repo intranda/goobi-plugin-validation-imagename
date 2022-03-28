@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
 import org.goobi.beans.Process;
 import org.goobi.beans.Step;
 import org.goobi.production.enums.PluginType;
@@ -18,12 +17,12 @@ import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.helper.Helper;
 import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
+import lombok.extern.log4j.Log4j2;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
+@Log4j2
 @PluginImplementation
 public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
-
-    private static final Logger logger = Logger.getLogger(FilenameValidationPlugin.class);
 
     private static final String PLUGIN_NAME = "intranda_validation_filename";
     private Step step;
@@ -49,7 +48,7 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
                 }
 
             } catch (SwapException | DAOException | IOException | InterruptedException e) {
-                logger.error(e);
+                log.error(e);
             }
         }
 
@@ -62,7 +61,7 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
                 }
 
             } catch (SwapException | DAOException | IOException | InterruptedException e) {
-                logger.error(e);
+                log.error(e);
             }
         }
 
