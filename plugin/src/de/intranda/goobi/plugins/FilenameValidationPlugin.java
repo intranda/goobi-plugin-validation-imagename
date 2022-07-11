@@ -89,7 +89,7 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
             boolean containsNonDigit = false;
             for (String pattern : regexList) {
                 validName = Pattern.matches(pattern, filepart);
-                containsNonDigit = Pattern.matches(".*\\D+.*", filepart);
+                containsNonDigit = Pattern.matches(".*\\D+.*", filepart); //NOSONAR, regex is save here
                 if (validName) {
                     break;
                 }
@@ -116,7 +116,7 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
                     filepart = filename.substring(0, filename.indexOf("."));
                 }
                 try {
-                    current = new Integer(filepart);
+                    current = Integer.parseInt(filepart);
                 } catch (Exception e) {
                     String s = Helper.getTranslation("plugin_validation_filenames_notANumber");
                     Helper.setFehlerMeldungUntranslated(s +" " + filename);
@@ -146,11 +146,12 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
 
 
     public String getDescription() {
-        return PLUGIN_NAME;
+        return getTitle();
     }
 
     @Override
     public void initialize(Process inProcess) {
+        log.trace("initialize");
     }
 
     @Override
@@ -165,7 +166,7 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
 
     @Override
     public Step getStepObject() {
-        return step;
+        return getStep();
     }
 
     @Override
