@@ -47,7 +47,7 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
                     return false;
                 }
 
-            } catch (SwapException | DAOException | IOException | InterruptedException e) {
+            } catch (SwapException | DAOException | IOException e) {
                 log.error(e);
             }
         }
@@ -60,7 +60,7 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
                     return false;
                 }
 
-            } catch (SwapException | DAOException | IOException | InterruptedException e) {
+            } catch (SwapException | IOException e) {
                 log.error(e);
             }
         }
@@ -97,7 +97,7 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
 
             if (!validName) {
                 String s = Helper.getTranslation("plugin_validation_filenames_wrongName");
-                Helper.setFehlerMeldungUntranslated(s +" " + filename);
+                Helper.setFehlerMeldungUntranslated(s + " " + filename);
                 return false;
             }
 
@@ -119,14 +119,14 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
                     current = Integer.parseInt(filepart);
                 } catch (Exception e) {
                     String s = Helper.getTranslation("plugin_validation_filenames_notANumber");
-                    Helper.setFehlerMeldungUntranslated(s +" " + filename);
+                    Helper.setFehlerMeldungUntranslated(s + " " + filename);
                     return false;
                 }
                 if (ancestor == null || ancestor + 1 == current) {
                     ancestor = current;
                 } else {
                     String s = Helper.getTranslation("plugin_validation_filenames_wrongOrder");
-                    Helper.setFehlerMeldungUntranslated(s +" " + filename);
+                    Helper.setFehlerMeldungUntranslated(s + " " + filename);
                     return false;
                 }
             }
@@ -143,7 +143,6 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
     public String getTitle() {
         return PLUGIN_NAME;
     }
-
 
     public String getDescription() {
         return getTitle();
