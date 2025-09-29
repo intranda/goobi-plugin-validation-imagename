@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config_plugin>
 	<validation>
-    <!-- file name must match against one of the patterns -->
+        <!-- file name must match against one of the patterns -->
 		<pattern>\w+_\d{4}</pattern>
 		<pattern>\d{8}</pattern>
+        <pattern>.+</pattern>
 	</validation>
-	<validateMasterFolder>true</validateMasterFolder>
-	<validateMediaFolder>false</validateMediaFolder>
+    <!-- configure a list of folders to check -->
+    <folder>master</folder>
+    <folder>media</folder>
+    <!-- in case of numeric filenames, check if order is ascending without gaps -->
 	<validateOrder>true</validateOrder>
+    <!-- check, if all configured folder contain the same number of files -->
+    <validateImageNumbers>true</validateImageNumbers>
 </config_plugin>

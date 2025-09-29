@@ -1,12 +1,16 @@
 package de.intranda.goobi.plugins;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
+import org.apache.commons.configuration.XMLConfiguration;
 import org.goobi.beans.Process;
 import org.goobi.beans.Step;
 import org.goobi.production.enums.PluginType;
@@ -15,6 +19,7 @@ import org.goobi.production.plugin.interfaces.IValidatorPlugin;
 
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.helper.Helper;
+import de.sub.goobi.helper.StorageProvider;
 import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
 import lombok.extern.log4j.Log4j2;
@@ -24,6 +29,7 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 @PluginImplementation
 public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
 
+    private static final long serialVersionUID = 4370324323535912244L;
     private static final String PLUGIN_NAME = "intranda_validation_filename";
     private Step step;
 
@@ -32,50 +38,67 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
 
         Process p = step.getProzess();
 
-        List<String> regexList = Arrays.asList(ConfigPlugins.getPluginConfig(PLUGIN_NAME).getStringArray("validation.pattern"));
+        XMLConfiguration config = ConfigPlugins.getPluginConfig(PLUGIN_NAME);
 
-        boolean validateMasterFolder = ConfigPlugins.getPluginConfig(PLUGIN_NAME).getBoolean("validateMasterFolder", false);
-        boolean validateMediaFolder = ConfigPlugins.getPluginConfig(PLUGIN_NAME).getBoolean("validateMediaFolder", false);
+        List<String> folderList = Arrays.asList(config.getStringArray("folder"));
 
-        boolean validateOrder = ConfigPlugins.getPluginConfig(PLUGIN_NAME).getBoolean("validateOrder", false);
+        List<String> regexList = Arrays.asList(config.getStringArray("validation.pattern"));
 
-        if (validateMasterFolder) {
+        boolean validateImageNumbers = config.getBoolean("validateImageNumbers", false);
+
+        boolean validateOrder = config.getBoolean("validateOrder", false);
+
+        for (String configuredFolder : folderList) {
             try {
-                String master = p.getImagesOrigDirectory(false);
-
-                if (!validateFolder(regexList, validateOrder, master)) {
+                String folder = p.getConfiguredImageFolder(configuredFolder);
+                if (!validateFolder(regexList, validateOrder, folder)) {
                     return false;
                 }
-
-            } catch (SwapException | DAOException | IOException e) {
+            } catch (IOException | SwapException | DAOException e) {
                 log.error(e);
+                Helper.setFehlerMeldung("plugin_validation_filenames_missingMasterFolder");
+                return false;
             }
         }
 
-        if (validateMediaFolder) {
-            try {
-                String media = p.getImagesTifDirectory(false);
-
-                if (!validateFolder(regexList, validateOrder, media)) {
+        if (validateImageNumbers) {
+            Map<Integer, String> folderMap = new HashMap<>();
+            for (String configuredFolder : folderList) {
+                try {
+                    String folder = p.getConfiguredImageFolder(configuredFolder);
+                    folderMap.put(StorageProvider.getInstance().getNumberOfFiles(folder), configuredFolder);
+                } catch (IOException | SwapException | DAOException e) {
+                    log.error(e);
+                    Helper.setFehlerMeldung("plugin_validation_filenames_missingMasterFolder");
                     return false;
                 }
-
-            } catch (SwapException | IOException e) {
-                log.error(e);
             }
+            // folderMap should contain only one entry, otherwise the number of files differ
+            if (folderMap.size() > 1) {
+                StringBuilder errorText = new StringBuilder();
+                for (Entry<Integer, String> folder : folderMap.entrySet()) {
+                    if (!errorText.isEmpty()) {
+                        errorText.append(", ");
+                    }
+                    errorText.append(folder.getValue()).append(" (").append(folder.getKey()).append(")");
+                }
+                Helper.setFehlerMeldung("plugin_validation_filenames_fileSizeDiffer", errorText.toString());
+                return false;
+            }
+
         }
 
         return true;
     }
 
     private boolean validateFolder(List<String> regexList, boolean validateOrder, String foldername) {
-        File folder = new File(foldername);
-        if (!folder.exists()) {
+        Path folder = Paths.get(foldername);
+        if (!StorageProvider.getInstance().isDirectory(folder)) {
             Helper.setFehlerMeldung("plugin_validation_filenames_missingMasterFolder");
             return false;
         }
-        String[] filenames = folder.list();
-        if (filenames == null || filenames.length == 0) {
+        List<String> filenames = StorageProvider.getInstance().list(folder.toString());
+        if (filenames == null || filenames.isEmpty()) {
             Helper.setFehlerMeldung("plugin_validation_filenames_emptyMasterFolder");
             return false;
         }
@@ -106,11 +129,9 @@ public class FilenameValidationPlugin implements IValidatorPlugin, IPlugin {
             }
         }
         if (validateOrder && allFilesContainsDigits) {
-            List<String> filenameList = Arrays.asList(filenames);
-            Collections.sort(filenameList);
             Integer ancestor = null;
             Integer current = null;
-            for (String filename : filenameList) {
+            for (String filename : filenames) {
                 String filepart = filename;
                 if (filename.contains(".")) {
                     filepart = filename.substring(0, filename.indexOf("."));
