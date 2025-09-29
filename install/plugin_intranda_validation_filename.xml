@@ -4,7 +4,6 @@
         <!-- file name must match against one of the patterns -->
 		<pattern>\w+_\d{4}</pattern>
 		<pattern>\d{8}</pattern>
-        <pattern>.+</pattern>
 	</validation>
     <!-- configure a list of folders to check -->
     <folder>master</folder>

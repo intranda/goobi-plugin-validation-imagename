@@ -3,6 +3,6 @@
 		<exec executable="mvn">
 			<arg value="package"/>
 		</exec>
-		<copy file="target/plugin_intranda_validation_imagename.jar" todir="/opt/digiverso/goobi/plugins/validation/"/>
+		<copy file="module-base/target/plugin-validation-imagename-base.jar" todir="/opt/digiverso/goobi/plugins/validation/"/>
 	</target>
 </project>
