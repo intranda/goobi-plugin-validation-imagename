@@ -15,8 +15,8 @@ Detail                      | Description
 **Plugin identifier**       | -
 **Plugin type**             | validation
 **Licence**                 | GPL 2.0 or newer
-**Documentation (German)**  | This plugin is not yet documented.
-**Documentation (English)** | This plugin is not yet documented.
+**Documentation (German)**  | https://docs.goobi.io/de/workflow/plugins/validation/goobi-plugin-validation-imagename
+**Documentation (English)** | https://docs.goobi.io/en/workflow/plugins/validation/goobi-plugin-validation-imagename
 
 ## Goobi details
 
