@@ -10,7 +10,7 @@ keywords:
 ---
 
 ## Introduction
-This documentation explains the plugin for to validate file names.
+This documentation explains the plugin to validate file names.
 
 
 ## Installation

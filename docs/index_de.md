@@ -35,7 +35,7 @@ Für die Verwendung des Plugins muss dieses in einem Arbeitsschritt ausgewählt 
 Wenn die Validierung gestartet wird, wird als erstes wird geprüft, ob die konfigurierten Ordner im Vorgang existieren und nicht leer sind.
 Wenn dies der Fall ist, werden die Dateinamen überprüft. Dabei wird für jede Datei der Basisname ohne Extension gebildet und mit den konfigurierten regulären Ausdrücken verglichen. Der Name muss mit mindestens einem der Pattern übereinstimmen.
 
-Wenn alle Dateienmanen nur Zahlen enthalten, kann optional die Reihenfolge überprüft werden. Dabei wird geprüft, dass alle Dateien aufsteigend sortiert sind und keine Lücken existieren.
+Wenn alle Dateinamen nur Zahlen enthalten, kann optional die Reihenfolge überprüft werden. Dabei wird geprüft, dass alle Dateien aufsteigend sortiert sind und keine Lücken existieren.
 
 Ebenfalls optional lässt sich überprüfen, ob in allen konfigurierten Ordnern die gleiche Anzahl an Dateien existiert.
 
