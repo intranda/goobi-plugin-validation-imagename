@@ -1,6 +1,9 @@
 # Goobi workflow Plugin: goobi-plugin-validation-imagename
 
-<img src="https://goobi.io/wp-content/uploads/logo_goobi_plugin.png" align="right" style="margin:0 0 20px 20px;" alt="Plugin for Goobi workflow" width="175" height="109">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://goobi.io/logo_goobi_workflow_dark.png">
+  <img src="https://goobi.io/logo_goobi_workflow.png" align="right" alt="Plugin for Goobi workflow" width="240" height="132" hspace="20" vspace="10">
+</picture>
 
 This Validation plugin for Goobi workflow checks, if the filenames of files inside of defined folders fulfill the requirements, e.g. to consist of 8-digits only or to match one of the other configured patterns.
 
